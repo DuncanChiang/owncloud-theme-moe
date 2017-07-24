@@ -82,3 +82,8 @@ table.grid th {
 .margin-bottom {
     margin-bottom: 10px;
 }
+
+.spaceIcon {
+    width: 16px;
+    height: 16px;
+}
