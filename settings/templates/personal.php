@@ -6,6 +6,32 @@
 /** @var $_ array */
 /** @var $_['urlGenerator'] */
 OC_Util::addScript('settings','changeliorder');
+function getTopTenFiles(){
+        $getUserFileSizeArray = array();
+        $user = \OC_User::getUser();
+        $sql = 'SELECT path,size FROM *PREFIX*filecache
+                WHERE storage= (SELECT numeric_id from *PREFIX*storages where id LIKE ?)
+                AND size != 0
+                AND path NOT LIKE "thumbnails%"
+                AND path NOT LIKE "files_versions%"
+                AND path NOT LIKE "files_trashbin%"
+                AND parent != 1
+                AND parent != -1
+                AND mimetype != (select id from *PREFIX*mimetypes where mimetype = "httpd/unix-directory")
+                ORDER BY CAST(size AS UNSIGNED) DESC LIMIT 10';
+        //$connection = \OC::$server->getDatabaseConnection();
+        //$prepare = $connection->prepare($sql);
+        $prepare = \OC_DB::prepare($sql);
+        $result = $prepare->execute(array("home::".$user));
+        if ($result->rowCount() > 0){
+                while ($row = $result->fetchRow()) {
+                    $size = \OC_Helper::humanFileSize($row['size']);
+                    $name = substr($row['path'],6);
+                    $getUserFileSizeArray[$name] = $size;
+                }
+            }
+        return $getUserFileSizeArray;
+    }
 ?>
 
 <div id="app-navigation">
@@ -69,14 +95,39 @@ $files_used = ($files_used == 0.00 && $storageinfo['used'] > 0) ? 0.01 : $files_
 
 
 $trash_percent  = ($trashbin == 0.00 && $trash_size > 0) ? 0.01 : $trashbin; 
-$versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions; 
+$versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions;
+
+$originalFileIcon = image_path('core', 'filetypes/text.svg');
+$originalFileIconPath = "<span><img src= $originalFileIcon class='spaceIcon'></span>";
+$versionFileIcon = image_path('core','filetypes/folder-version.svg');
+$versionFileIconPath = "<span><img src=$versionFileIcon class='spaceIcon'></span>";
+$trashbinIcon = image_path('core','actions/delete-hover.svg');
+$trashbinIconPath = "<span><img src=$trashbinIcon class='spaceIcon'></span>";
+$topTenList = getTopTenFiles();
 ?>
 
-                <?php print_unescaped($l->t("Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong> [files used <strong>%s(%s)</strong> / trashbin used <strong>%s(%s)</strong> / versions used <strong>%s(%s)</storng>]",array($_['total_space'], $usage, $total_percent.'%', $_['usage'], $files_used.'%', OC_Helper::humanFileSize($trash_size), $trashbin.'%', OC_Helper::humanFileSize($version_size), $versions.'%') ) );?>
+            <?php print_unescaped($l->t("Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong> [ %s <strong>%s (%s)</strong> / %s <strong>%s (%s)</strong> / %s <strong>%s (%s)</storng> ]",array($_['total_space'], $usage, $total_percent.'%',$originalFileIconPath, $_['usage'],$files_used.'%', $trashbinIconPath,OC_Helper::humanFileSize($trash_size), $trashbin.'%', $versionFileIconPath,OC_Helper::humanFileSize($version_size), $versions.'%') ) );?>
             </p>
 	</div>
 </div>
-
+<div>
+    <table>
+    <tr>
+        <th><?php p($l->t('File Name')); ?></th>
+        <th><?php p($l->t('Size')); ?></th>
+    </tr>
+    <?php if(empty($topTenList)): ?>
+        <th><?php p($l->t('No files in here')); ?></th>
+    <?php else:?>
+        <?php foreach($topTenList as $name => $size): ?>
+            <tr>
+                <th><?php p($name) ?></th>
+                <th><?php p($size) ?></th>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    </table>
+</div>
 <?php if ($_['enableAvatars']): ?>
 <form id="avatar" class="section" method="post" action="<?php p(\OC_Helper::linkToRoute('core.avatar.postAvatar')); ?>">
 	<h2><?php p($l->t('Profile picture')); ?></h2>

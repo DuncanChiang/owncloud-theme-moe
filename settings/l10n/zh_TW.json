@@ -16,10 +16,13 @@
     "Remove image" : "移除大頭照",
     "Terms of service" : "服務使用說明",
     "Notifications" : "訊息通知",
+    "No files in here" : "沒有任何檔案",
+    "File Name" : "檔案名稱",
+    "Size" : "檔案大小",
     "System Information" : "系統資訊",
     "Use the cloud storage service anytime, anywhere" : "隨時隨地使用雲端儲存服務",
     "These files will be automatically synced to your other devices" : "系統會自動進行跨平台、跨裝置資料同步化作業，將檔案同步置您的裝置",
     "This cloud storage service provides user storage space of 30GB" : "本雲端儲存服務提供用戶儲存空間 30GB。",
-    "Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong> [files used <strong>%s(%s)</strong> / trashbin used <strong>%s(%s)</strong> / versions used <strong>%s(%s)</storng>]" : "總空間為<strong>%s</strong>，已使用 <strong>%s(%s)</strong>。[正本檔案使用 <strong>%s(%s)</strong> / 回收桶使用 <strong>%s(%s)</strong> / 版本檔案使用 <strong>%s(%s)</strong>]"
+    "Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong> [ %s <strong>%s (%s)</strong> / %s <strong>%s (%s)</strong> / %s <strong>%s (%s)</storng> ]" : "總空間為<strong>%s</strong>，已使用 <strong>%s(%s)</strong>。[ %s <strong>%s(%s)</strong> / %s <strong>%s(%s)</strong> / %s <strong>%s(%s)</strong> ]"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
