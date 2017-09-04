@@ -22,7 +22,8 @@
     "System Information" : "系統資訊",
     "Use the cloud storage service anytime, anywhere" : "隨時隨地使用雲端儲存服務",
     "These files will be automatically synced to your other devices" : "系統會自動進行跨平台、跨裝置資料同步化作業，將檔案同步置您的裝置",
+    "Either png or jpg. Ideally square but you will be able to crop it. The file is not allowed to exceed the maximum size of 20 MB." : "png 或 jpg ，建議使用方形圖檔，但您也可以選擇上傳後剪裁，圖 檔不得超過 20 MB",
     "This cloud storage service provides user storage space of 30GB" : "本雲端儲存服務提供用戶儲存空間 30GB。",
-    "Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong> [ %s <strong>%s (%s)</strong> / %s <strong>%s (%s)</strong> / %s <strong>%s (%s)</storng> ]" : "總空間為<strong>%s</strong>，已使用 <strong>%s(%s)</strong>。[ %s <strong>%s(%s)</strong> / %s <strong>%s(%s)</strong> / %s <strong>%s(%s)</strong> ]"
+    "%s Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong><br>%s <strong>%s (%s)</strong><br>%s <strong>%s (%s)</strong><br>%s <strong>%s (%s)</storng>" : "%s 總空間為<strong>%s</strong>，已使用 <strong>%s(%s)</strong><br>%s 正本檔案使用 <strong>%s(%s)</strong><br>%s 回收桶使用 <strong>%s(%s)</strong><br>%s 版本檔案使用 <strong>%s(%s)</strong>"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

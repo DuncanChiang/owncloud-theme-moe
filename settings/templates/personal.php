@@ -5,7 +5,9 @@
 
 /** @var $_ array */
 /** @var $_['urlGenerator'] */
+
 OC_Util::addScript('settings','changeliorder');
+
 function getTopTenFiles(){
         $getUserFileSizeArray = array();
         $user = \OC_User::getUser();
@@ -55,7 +57,7 @@ function getTopTenFiles(){
 
 <div id="app-content">
 
-<div id="personal" class="section" style="padding: 30px 30px 0;margin-bottom: -15px;">
+<div id="personal" class="section">
     <h2><?php p($l->t('Personal')); ?></h2>
     <p>
         <?php print_unescaped("<strong>".$l->t("Account")."</strong>". ' : ' . OC_User::getUser());?>
@@ -64,6 +66,20 @@ function getTopTenFiles(){
         <?php print_unescaped("<strong>".$l->t("Displayname")."</strong>". ' : ' . OC_User::getDisplayName(OC_User::getUser()));?>
     </p>
 </div>
+
+<?php
+
+$diskIcon = image_path('settings', 'disk-icon.png');
+$diskIconPath = "<span><img src= $diskIcon class='spaceIcon'></span>";
+$originalFileIcon = image_path('core', 'filetypes/text.svg');
+$originalFileIconPath = "<span><img src= $originalFileIcon class='spaceIcon'></span>";
+$versionFileIcon = image_path('core','filetypes/folder-version.svg');
+$versionFileIconPath = "<span><img src=$versionFileIcon class='spaceIcon'></span>";
+$trashbinIcon = image_path('core','actions/delete-hover.svg');
+$trashbinIconPath = "<span><img src=$trashbinIcon class='spaceIcon'></span>";
+$topTenList = getTopTenFiles();
+
+?>
 
 <div id="quota-stats" class="section" style="padding: 30px 30px 0;margin-bottom: -15px;">
     <h2><?php p($l->t('Quota Stats')); ?></h2>
@@ -81,7 +97,10 @@ $usage = \OC_Helper::humanFileSize($storageinfo['used'] + $version_size + $trash
 $used = $storageinfo['used'] + $version_size + $trash_size;
 $files_used = number_format($storageinfo['used']/$storageinfo['total']*100,2);
 $total_percent = ($total_percent == 0.00 && $used > 0) ? 0.01 : $total_percent;
-$files_used = ($files_used == 0.00 && $storageinfo['used'] > 0) ? 0.01 : $files_used
+$files_used = ($files_used == 0.00 && $storageinfo['used'] > 0) ? 0.01 : $files_used;
+
+$trash_percent  = ($trashbin == 0.00 && $trash_size > 0) ? 0.01 : $trashbin;
+$versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions;
 
 ?>
 
@@ -89,24 +108,9 @@ $files_used = ($files_used == 0.00 && $storageinfo['used'] > 0) ? 0.01 : $files_
 <div id="quota" class="section">
 	<div  class="progress" style="width:<?php p($total_percent);?>%"
 		<?php if($total_percent > 80): ?> class="quota-warning" <?php endif; ?>>
-            <p id="quotatext">&emsp;
-<?php
+            <p id="quotatext">
 
-
-
-$trash_percent  = ($trashbin == 0.00 && $trash_size > 0) ? 0.01 : $trashbin; 
-$versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions;
-
-$originalFileIcon = image_path('core', 'filetypes/text.svg');
-$originalFileIconPath = "<span><img src= $originalFileIcon class='spaceIcon'></span>";
-$versionFileIcon = image_path('core','filetypes/folder-version.svg');
-$versionFileIconPath = "<span><img src=$versionFileIcon class='spaceIcon'></span>";
-$trashbinIcon = image_path('core','actions/delete-hover.svg');
-$trashbinIconPath = "<span><img src=$trashbinIcon class='spaceIcon'></span>";
-$topTenList = getTopTenFiles();
-?>
-
-            <?php print_unescaped($l->t("Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong> [ %s <strong>%s (%s)</strong> / %s <strong>%s (%s)</strong> / %s <strong>%s (%s)</storng> ]",array($_['total_space'], $usage, $total_percent.'%',$originalFileIconPath, $_['usage'],$files_used.'%', $trashbinIconPath,OC_Helper::humanFileSize($trash_size), $trashbin.'%', $versionFileIconPath,OC_Helper::humanFileSize($version_size), $versions.'%') ) );?>
+            <?php print_unescaped($l->t("%s Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong><br>%s <strong>%s (%s)</strong><br>%s <strong>%s (%s)</strong><br>%s <strong>%s (%s)</storng>",array($diskIconPath, $_['total_space'], $usage, $total_percent.'%',$originalFileIconPath, $_['usage'],$files_used.'%', $trashbinIconPath,OC_Helper::humanFileSize($trash_size), $trashbin.'%', $versionFileIconPath,OC_Helper::humanFileSize($version_size), $versions.'%') ) );?>
             </p>
 	</div>
 </div>
