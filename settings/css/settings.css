@@ -2,7 +2,14 @@
 #contains{
     padding-top: 0;
 }
-
+.quota-ratio {
+   position: absolute;
+   top: 50%; 
+   right: 10px;
+}
+#quota  {
+    cursor: default;
+}
 .client {
     background: #ddd;
     border: 1px solid #ccc;
@@ -86,4 +93,46 @@ table.grid th {
 .spaceIcon {
     width: 16px;
     height: 16px;
+}
+
+#topten {
+  text-align: center;
+  line-height: 40px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 2px solid #ddd;
+  border-radius: .25rem;
+}
+
+#topten thead tr:first-child {
+  background: #e6f7ff;
+  border: none;
+}
+
+#topten th:first-child, td:first-child {
+  padding: 0 15px 0 20px;
+}
+
+#topten thead tr th {
+  border-bottom: 3px solid #ddd;
+  text-align: center;
+}
+
+#topten tbody tr:hover {
+  background-color: rgba(237, 28, 64, .1);
+  cursor: default;
+}
+
+#topten tbody tr:last-child td {
+  border: none;
+}
+
+#topten tbody td {
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  padding: 2px 5px;
+}
+
+#topten td:last-child {
+  padding-right: 10px;
 }

@@ -11,7 +11,7 @@ OC_Util::addScript('settings','changeliorder');
 function getTopTenFiles(){
         $getUserFileSizeArray = array();
         $user = \OC_User::getUser();
-        $sql = 'SELECT path,size FROM *PREFIX*filecache
+        $sql = 'SELECT path,name,size FROM *PREFIX*filecache
                 WHERE storage= (SELECT numeric_id from *PREFIX*storages where id LIKE ?)
                 AND size != 0
                 AND path NOT LIKE "thumbnails%"
@@ -19,7 +19,7 @@ function getTopTenFiles(){
                 AND path NOT LIKE "files_trashbin%"
                 AND parent != 1
                 AND parent != -1
-                AND mimetype != (select id from *PREFIX*mimetypes where mimetype = "httpd/unix-directory")
+                AND mimetype != (SELECT id from *PREFIX*mimetypes WHERE mimetype = "httpd/unix-directory")
                 ORDER BY CAST(size AS UNSIGNED) DESC LIMIT 10';
         //$connection = \OC::$server->getDatabaseConnection();
         //$prepare = $connection->prepare($sql);
@@ -28,8 +28,16 @@ function getTopTenFiles(){
         if ($result->rowCount() > 0){
                 while ($row = $result->fetchRow()) {
                     $size = \OC_Helper::humanFileSize($row['size']);
-                    $name = substr($row['path'],6);
-                    $getUserFileSizeArray[$name] = $size;
+                    $path = substr($row['path'],5);
+                    $name = $row['name'];
+                    $getUserFileSizeArray[$name] = ['size' => $size,
+                                                    'link' => \OC_Helper::linkTo(
+                                                                  'files', 'index.php', array(
+				                                  'dir' => dirname($path),
+				                                  'scrollto' => $name,
+			                                          )                                     
+                                                              )
+                                                   ];
                 }
             }
         return $getUserFileSizeArray;
@@ -114,24 +122,36 @@ $versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions
             </p>
 	</div>
 </div>
-<div>
-    <table>
+<div class="section">
+<table id="topten">
+  <thead>
     <tr>
-        <th><?php p($l->t('File Name')); ?></th>
-        <th><?php p($l->t('Size')); ?></th>
+      <th colspan="3"><?php p($l->t('Your Top Ten Related Files')); ?></th>
     </tr>
-    <?php if(empty($topTenList)): ?>
-        <th><?php p($l->t('No files in here')); ?></th>
+    <tr>
+      <th>#</th>
+      <th><?php p($l->t('File Name')); ?></th>
+      <th><?php p($l->t('Size')); ?></th>
+    </tr>
+  </thead>
+  <tbody>
+      <?php if(empty($topTenList)): ?>
+        <td colspan="3"><?php p($l->t('No files in here')); ?></td>
     <?php else:?>
-        <?php foreach($topTenList as $name => $size): ?>
+        <?php $index=0?>
+        <?php foreach($topTenList as $name => $data): ?>
+            <?php $index+=1?>
             <tr>
-                <th><?php p($name) ?></th>
-                <th><?php p($size) ?></th>
+                <td><?php p($index) ?></td>
+                <td><a href=<?php p($data['link']) ?>><?php p($name) ?></a></td>
+                <td><?php p($data['size']) ?></td>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
-    </table>
+  </tbody>
+</table>
 </div>
+
 <?php if ($_['enableAvatars']): ?>
 <form id="avatar" class="section" method="post" action="<?php p(\OC_Helper::linkToRoute('core.avatar.postAvatar')); ?>">
 	<h2><?php p($l->t('Profile picture')); ?></h2>
